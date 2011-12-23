@@ -16,7 +16,7 @@ public class Keyboard implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent evt) {	
-		if (evt.getKeyCode() == KeyEvent.VK_SPACE && Fenetre.anime){ 
+		if (evt.getKeyCode() == KeyEvent.VK_SPACE && Fenetre._anime){ 
 			if (Fenetre._list_birds.size() != 0) { // Test s'il existe un oiseau
 				if (bird._bouge == 1)
 					System.out.println("Vol Stationnaire.");
@@ -26,7 +26,7 @@ public class Keyboard implements KeyListener {
 			}
 		}
 		
-		if (evt.getKeyCode() == KeyEvent.VK_ENTER && Fenetre.oeufEnCours == null && Fenetre.anime){
+		if (evt.getKeyCode() == KeyEvent.VK_ENTER && Fenetre.oeufEnCours == null && Fenetre._anime){
 			if (Fenetre._list_birds.size() != 0 ) { // Test s'il existe un oiseau
 				System.out.println("Lacher oeuf.");
 				Fenetre.oeufEnCours = Fenetre._list_birds.get(0).lay_egg();

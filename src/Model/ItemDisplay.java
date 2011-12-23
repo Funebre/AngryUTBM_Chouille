@@ -9,6 +9,7 @@ public class ItemDisplay extends Observable implements Constantes {
 	protected int _width;
 	protected int _height;
 	protected Rectangle _r;
+	protected int _type;
 	
 	public String _texture;
 	protected boolean _solid;

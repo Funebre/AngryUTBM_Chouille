@@ -20,11 +20,10 @@ import Model.Fenetre;
 import Model.ItemDisplay;
 import Model.Walkers;
 
-
-public class Affichage extends JPanel implements Observer{
+public class Affichage extends JPanel implements Observer {
 	/**
-	 * Obligatoire mais des recherches à faire pour savoir pk
-	 */
+	* Obligatoire mais des recherches à faire pour savoir pk
+	*/
 	private static final long serialVersionUID = 1L;
 	private Keyboard keyListener;
 	
@@ -44,37 +43,37 @@ public class Affichage extends JPanel implements Observer{
 	
 	
 
-    public void paintComponent(Graphics g){	
+	public void paintComponent(Graphics g){	
 		this.requestFocus();
 		
-    	for(int i = 0; i < Fenetre._list_static_items.size(); i++) {
+		for(int i = 0; i < Fenetre._list_static_items.size(); i++) {
 			try {
 				ItemDisplay stock = Fenetre._list_static_items.get(i);
 				Image img = ImageIO.read(new File(stock._texture));
 				g.drawImage(img, stock.getPosX(), stock.getPosY(), stock.getWidth(), stock.getHeight(), this);
-			}catch (IOException e) {
-		        // TODO Auto-generated catch block
-		        e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-    	
+		
 		if(Fenetre._list_birds.isEmpty() == false){
 			for(int i = 0; i < Fenetre._list_birds.size(); i++) {
 				try {
-			    	Birds stock = Fenetre._list_birds.get(i);
-			    	
-			    	
-			    	if (!stock.isDestructed()) {
-			    		Image img = ImageIO.read(new File(stock._texture));
-			    		g.drawImage(img, stock.getPosX(), stock.getPosY(), stock.getWidth(), stock.getHeight(), this);
-			    	}
-			    	
-			    		
+					Birds stock = Fenetre._list_birds.get(i);
+					
+					
+					if (!stock.isDestructed()) {
+						Image img = ImageIO.read(new File(stock._texture));
+						g.drawImage(img, stock.getPosX(), stock.getPosY(), stock.getWidth(), stock.getHeight(), this);
+					}
+					
+					
 				} catch (IOException e) {
-			        // TODO Auto-generated catch block
-			        e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-		 }
+			}
 		}
 		
 		if(Fenetre._list_walkers.isEmpty() == false) {
@@ -85,10 +84,10 @@ public class Affichage extends JPanel implements Observer{
 						Image img = ImageIO.read(new File(stock._texture));
 						g.drawImage(img, stock.getPosX(), stock.getPosY(), stock.getWidth(), stock.getHeight(), this);
 					}
-				}catch (IOException e) {
-			        // TODO Auto-generated catch block
-			        e.printStackTrace();
-					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -102,42 +101,14 @@ public class Affichage extends JPanel implements Observer{
 				e.printStackTrace();
 			}
 		}
-		
-		
-    }               
-
-    public void add_elem_birds(Birds item){
-    	//_list_birds_display.add(item);
-    }
-    public void rm_elem_birds(int pos){
-    	//_list_birds_display.remove(pos);
-    }
-    public void rm_elem_walkers(int pos){
-    	//_list_walkers_display.remove(pos);
-    }
-    public ArrayList<Birds> get_elem_birds(){
-    	//return _list_birds_display;
-    	return null;
-    }
-    public ArrayList<Walkers> get_elem_walkers(){
-    	//return _list_walkers_display;
-    	return null;
-    }
-    public void add_elem_walker(Walkers item){
-    	//_list_walkers_display.add(item);
-    }
-    public void add_elem_static(ItemDisplay item){
-    	//_list_static_items_display.add(item);
-    }
-
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		
 		this.removeKeyListener(keyListener);
-    	keyListener = new Keyboard(Fenetre._list_birds.get(0));
+		keyListener = new Keyboard(Fenetre._list_birds.get(0));
 		this.addKeyListener(keyListener);
-		
 	}
-
-
+	
 }

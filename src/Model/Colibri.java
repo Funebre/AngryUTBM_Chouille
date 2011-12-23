@@ -9,8 +9,9 @@ public class Colibri extends Birds {
 		
 		this._solid = true;
 		this._liste_texture.add("img/oiseau1.png");
-		this._texture = "img/oiseau1.png"; 
-		}
+		this._texture = "img/oiseau1.png";
+		this._type = 6;
+	}
 	
 	public Small_egg lay_egg() {
 		Small_egg egg = new Small_egg(this.getPosX(), this.getPosY());

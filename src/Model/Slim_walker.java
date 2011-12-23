@@ -15,6 +15,7 @@ public class Slim_walker extends Walkers {
 		this._liste_texture_back.add("img/imgg3.png");
 		
 		this._texture = "img/imgd.png";
+		this._type = 4;
 	}
 	
 	public Slim_walker (float x, float y) {
@@ -27,6 +28,8 @@ public class Slim_walker extends Walkers {
 		this._liste_texture_back.add("img/imgg.png");
 		this._liste_texture_back.add("img/imgg2.png");
 		this._liste_texture_back.add("img/imgg3.png");
+		
 		this._texture = "img/imgd.png";
+		this._type = 4;
 	}
 }

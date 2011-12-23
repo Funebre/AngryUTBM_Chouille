@@ -5,7 +5,8 @@ import java.awt.Rectangle;
 
 public class Background_obj extends ItemDisplay {
 	public Background_obj () {
-		
+		this._solid = false;
+		this._type = 2;
 	}
 	
 	public Background_obj (float x, float y, String texture, int width, int height) {
@@ -16,5 +17,6 @@ public class Background_obj extends ItemDisplay {
 		this._height = height;
 		this._r = new Rectangle(this.getPosX(), this.getPosY(), this._width, this._height);
 		this._solid = false;
+		this._type = 2;
 	}
 }

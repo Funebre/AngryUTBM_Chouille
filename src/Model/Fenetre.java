@@ -16,6 +16,9 @@ import javax.swing.JMenuItem;
 
 import Controller.Keyboard;
 
+import Threading.Print_aff;
+import Threading.Print_menu;
+import Threading.Calc_pos;
 import View.Affichage;
 
 public class Fenetre extends JFrame implements Constantes, Runnable{
@@ -23,8 +26,14 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 	 * Obligatoire pour une fenêtre
 	 */
 	private static final long serialVersionUID = 1L;
-
-	static JFrame fenetre = new JFrame();
+	
+	private static Thread _aff = null;
+	private static Thread _calcPos = null;
+	private static Thread _menu = null;
+	private static Thread _fenetre = null;
+	public static Fenetre _fenster = null;
+	public static boolean _working = false;
+	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu menuedition = new JMenu("Edition");
 	private JMenuItem go = new JMenuItem("Lancer");
@@ -41,19 +50,51 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 	static public List<Birds> _list_birds = new LinkedList<Birds>();
 	static public List<ItemDisplay> _list_static_items = new LinkedList<ItemDisplay>();
 	static public Eggs oeufEnCours = null;
-	static public boolean anime = false;
+	static public boolean _anime = false;
 	
 	private Affichage image;
 	private Menu menu = new Menu();
 	private MenuNiveau menuchargement = new MenuNiveau();
-	
-		
+
 	public static void main(String[] args){
+		_fenster = new Fenetre();
 		
-		Fenetre fenster = new Fenetre();
+		if (Fenetre._fenster != null) {
+			Fenetre._fenster.startThread(new Thread(Fenetre._fenster));
+		}
 	}
 	
+	public void startThread (Thread thread) {
+		_fenetre = thread;
+		_fenetre.start();
+	}
+
+	public void run() {
+		while (_working) {
+			if (_anime) {
+				if (_aff == null) {
+					_aff = new Thread(new Print_aff());
+					_aff.start();
+				}
+				
+				if (_calcPos == null) {
+					_calcPos = new Thread(new Calc_pos());
+					_calcPos.start();
+				}
+			} else {
+				if (_menu == null) {
+					_menu = new Thread(new Print_menu());
+				}
+			}
+		}
+		System.exit(0);
+	}
+	
+	private static void start() {
 		
+	}
+
+	/*
 	class GoPlay implements Runnable {
 		public void run() {
 			setContentPane(image);
@@ -68,8 +109,10 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 			calc_pos();
 		}
 	}
+	*/
 	
 	public Fenetre() {
+		_working = true;
 		DataBase level = new DataBase();
 		level.loadLevel(1);
 		
@@ -78,17 +121,19 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 		this.menu.add(jouer);
 		jouer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				anime = true;
-				game = new Thread(new GoPlay());
+				_anime = true;
+				/*game = new Thread(new GoPlay());
 				game.start();
 				position = new Thread(new GoPos());
 				position.start();
+				*/
 			}
 		});
 		this.menu.add(exit);
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
+				//System.exit(0);
+				Fenetre._working = false;
 			}
 		});
 		
@@ -106,16 +151,16 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 		this.menuedition.add(go);
 		go.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				anime = true;
-				game = new Thread(new GoPlay());
-				game.start();
+				_anime = true;
+				/*game = new Thread(new GoPlay());
+				game.start();*/
 			}
 		});
 		
 		this.menuedition.add(pause);
 		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent agr0) {
-				anime = false;
+				_anime = false;
 			}
 		});
 		
@@ -128,15 +173,6 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 		
 		
 		this.menuBar.add(menuedition);
-		
-		for(int i = 0; i < _list_walkers.size(); i++)
-			image.add_elem_walker(_list_walkers.get(i));
-		
-		for(int i = 0; i < _list_birds.size(); i++)
-			image.add_elem_birds(_list_birds.get(i));
-		
-		for(int i = 0; i < _list_static_items.size(); i++)
-			image.add_elem_static(_list_static_items.get(i));
 		
 		this.setTitle("Test d'affichage");
 		this.setSize(800,400);
@@ -153,7 +189,7 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 	}
 	
 	void printObj () {
-		while(anime){
+		while(_anime){
 			//Suppression des oiseaux ayant collisionné
 			if(_list_birds.isEmpty() == false){
 				for(int i = 0; i < _list_birds.size(); i++) {
@@ -176,40 +212,31 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 	}
 	
 	public void calc_pos () {
-		while(anime){
-			for (int i = 0; i < _list_walkers.size(); i++) {
-				if (_list_walkers.get(i).collide_static() || this.outScreen(_list_walkers.get(i)))
-					_list_walkers.get(i).switchArriereState();
-				
-				_list_walkers.get(i).move(this);
-			}
+		for (int i = 0; i < _list_walkers.size(); i++) {
+			if (_list_walkers.get(i).collide_static() || this.outScreen(_list_walkers.get(i)))
+				_list_walkers.get(i).switchArriereState();
 			
-						
-			//Deplacement des oiseaux
-			for(int i = 0; i < _list_birds.size(); i++){
-				if (_list_birds.get(i).collide_static() || _list_birds.get(i).collide_dynamic() || this.outScreen(_list_birds.get(i)) || _list_birds.get(i).isDestructing())
-					_list_birds.get(i).demol();
-				_list_birds.get(i).move();
-			}
-			
-			if(oeufEnCours != null) {
-				int c = oeufEnCours.collide();
-				if (c != -1){
-					_list_walkers.remove(c);
+			_list_walkers.get(i).move(this);
+		}
+		
 					
-					oeufEnCours = null;
-				} else if (oeufEnCours.collide_static()){
-					oeufEnCours = null;
-				} else {
-					oeufEnCours.moveY(1);
-				}
-			}
-			
-			
-			try {
-				Thread.sleep(_REFRESH_POS);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		//Deplacement des oiseaux
+		for(int i = 0; i < _list_birds.size(); i++){
+			if (_list_birds.get(i).collide_static() || _list_birds.get(i).collide_dynamic() || this.outScreen(_list_birds.get(i)) || _list_birds.get(i).isDestructing())
+				_list_birds.get(i).demol();
+			_list_birds.get(i).move();
+		}
+		
+		if(oeufEnCours != null) {
+			int c = oeufEnCours.collide();
+			if (c != -1){
+				_list_walkers.remove(c);
+				
+				oeufEnCours = null;
+			} else if (oeufEnCours.collide_static()){
+				oeufEnCours = null;
+			} else {
+				oeufEnCours.moveY(1);
 			}
 		}
 	}
@@ -222,12 +249,7 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 		}
 		
 		return false;
-	}
-
-	@Override
-	public void run() {
-		
-	}        
+	}   
 }
 
 

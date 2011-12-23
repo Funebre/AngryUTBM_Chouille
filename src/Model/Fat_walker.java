@@ -13,6 +13,7 @@ public class Fat_walker extends Walkers{
 		this._liste_texture_back.add("img/grog2.png");
 		this._liste_texture_back.add("img/grog3.png");
 		this._texture = "img/grod1.png";
+		this._type = 5;
 	}
 	
 	public Fat_walker (int x, int y) {
@@ -27,5 +28,6 @@ public class Fat_walker extends Walkers{
 		this._liste_texture_back.add("img/grog2.png");
 		this._liste_texture_back.add("img/grog3.png");
 		this._texture = "img/grod1.png";
+		this._type = 5;
 	}
 }

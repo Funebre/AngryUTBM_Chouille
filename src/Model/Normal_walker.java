@@ -17,6 +17,7 @@ public class Normal_walker extends Walkers {
 		this._liste_texture_back.add("img/gauche4.png");
 
 		this._texture = "img/droite1.png";
+		this._type = 3;
 	}
 	
 	public Normal_walker (float x, float y) {
@@ -30,6 +31,8 @@ public class Normal_walker extends Walkers {
 		this._liste_texture_back.add("img/gauche2.png");
 		this._liste_texture_back.add("img/gauche1.png");
 		this._liste_texture_back.add("img/gauche4.png");
+		
 		this._texture = "img/droite1.png";
+		this._type = 3;
 	}
 }
