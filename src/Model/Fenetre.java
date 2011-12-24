@@ -1,7 +1,5 @@
 package Model;
 
-
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -21,7 +19,7 @@ import Threading.Print_menu;
 import Threading.Calc_pos;
 import View.Affichage;
 
-public class Fenetre extends JFrame implements Constantes, Runnable{
+public class Fenetre extends JFrame implements Constantes {
 	/**
 	 * Obligatoire pour une fenêtre
 	 */
@@ -30,7 +28,6 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 	private static Thread _aff = null;
 	private static Thread _calcPos = null;
 	private static Thread _menu = null;
-	private static Thread _fenetre = null;
 	public static Fenetre _fenster = null;
 	public static boolean _working = false;
 	
@@ -57,49 +54,51 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 	private MenuNiveau menuchargement = new MenuNiveau();
 
 	public static void main(String[] args){
-		_fenster = new Fenetre();
+		Fenetre._fenster = new Fenetre();
 		
 		if (Fenetre._fenster != null) {
-			Fenetre._fenster.startThread(new Thread(Fenetre._fenster));
+			Fenetre._working = true;
+			Fenetre._fenster.startThread();
 		}
 	}
 	
-	public void startThread (Thread thread) {
-		_fenetre = thread;
-		_fenetre.start();
-	}
-
-	public void run() {
+	public void startThread () {
 		while (_working) {
 			if (_anime) {
-				if (_aff == null) {
+				if (_aff == null && _calcPos == null) {
 					_aff = new Thread(new Print_aff());
 					_aff.start();
-				}
-				
-				if (_calcPos == null) {
 					_calcPos = new Thread(new Calc_pos());
 					_calcPos.start();
+					
+					setContentPane(image);
+					setSize(800,600);
+
+					System.out.println("Cree le Thread affichage et calcul de position");
+					setVisible(true);
 				}
 			} else {
 				if (_menu == null) {
 					_menu = new Thread(new Print_menu());
+					setContentPane(menu);
+
+					System.out.println("Cree le Thread menu");
+					setVisible(true);
 				}
+			}
+
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 		System.exit(0);
-	}
-	
-	private static void start() {
-		
 	}
 
 	/*
 	class GoPlay implements Runnable {
 		public void run() {
-			setContentPane(image);
-			setSize(800,600);
-			setVisible(true);
 			printObj();
 		}
 	}
@@ -122,6 +121,7 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 		jouer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				_anime = true;
+				System.out.println("Bouton Jouer");
 				/*game = new Thread(new GoPlay());
 				game.start();
 				position = new Thread(new GoPos());
@@ -134,6 +134,7 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 			public void actionPerformed(ActionEvent arg0) {
 				//System.exit(0);
 				Fenetre._working = false;
+				System.out.println("Bouton Exit");
 			}
 		});
 		
@@ -174,7 +175,7 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 		
 		this.menuBar.add(menuedition);
 		
-		this.setTitle("Test d'affichage");
+		this.setTitle("AngryUTBM");
 		this.setSize(800,400);
 		
 		this.setLocationRelativeTo(null);
@@ -182,33 +183,24 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 		this.setResizable(false);
 
 		this.setJMenuBar(menuBar);
-		this.setContentPane(menu);
+		//this.setContentPane(menu);
 
-		this.setVisible(true);
+		//this.setVisible(true);
 			
 	}
 	
-	void printObj () {
-		while(_anime){
-			//Suppression des oiseaux ayant collisionné
-			if(_list_birds.isEmpty() == false){
-				for(int i = 0; i < _list_birds.size(); i++) {
-					if (_list_birds.get(i).isDestructed()) {
-						_list_birds.remove(i);
-						//image.rm_elem_birds(i);
-					}
+	public void printObj () {
+		//Suppression des oiseaux ayant collisionné
+		if(_list_birds.isEmpty() == false){
+			for(int i = 0; i < _list_birds.size(); i++) {
+				if (_list_birds.get(i).isDestructed()) {
+					_list_birds.remove(i);
+					//image.rm_elem_birds(i);
 				}
 			}
-			
-			this.repaint();
-			
-			try {
-				Thread.sleep(_REFRESH_AFF);
-			} catch (InterruptedException e) {
-            	// TODO Auto-generated catch block
-            	e.printStackTrace();
-			}
 		}
+		
+		this.repaint();
 	}
 	
 	public void calc_pos () {
@@ -251,7 +243,7 @@ public class Fenetre extends JFrame implements Constantes, Runnable{
 		return false;
 	}   
 }
-
+	
 
 
 
