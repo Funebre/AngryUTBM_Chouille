@@ -24,7 +24,7 @@ public class Calc_pos implements Constantes, Runnable {
 			if (Fenetre._list_walkers.get(i).collide_static() || Fenetre._fenster.outScreen(Fenetre._list_walkers.get(i)))
 				Fenetre._list_walkers.get(i).switchArriereState();
 			
-			Fenetre._list_walkers.get(i).move(Fenetre._fenster);
+			Fenetre._list_walkers.get(i).move();
 		}
 		
 					

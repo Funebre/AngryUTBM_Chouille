@@ -1,7 +1,7 @@
 package Model;
 
 
-public class Eggs extends MovingItems {
+abstract public class Eggs extends MovingItems {
 	public Eggs() {
 		super();
 	}

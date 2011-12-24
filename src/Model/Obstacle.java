@@ -7,8 +7,9 @@ public class Obstacle extends ItemDisplay {
 	}
 	
 	public Obstacle (int x, int y, String texture, int width, int height) {
-		super (x, y, width, height, texture);
+		super (x, y, width, height);
 		this._solid = true;
 		this._type = 1;
+		this._texture = texture;
 	}
 }
