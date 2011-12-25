@@ -2,13 +2,11 @@ package Threading;
 
 import Model.Constantes;
 import Model.Fenetre;
+import Model.StateFen;
 
 public class Calc_pos implements Constantes, Runnable {
-	private boolean _stop = false;
-	
 	public void run() {
-		while (!_stop && Fenetre._anime) {
-			//Fenetre._fenster.calc_pos();
+		while (Fenetre._state == StateFen.Level) {
 			this.calc_pos();
 			
 			try {

@@ -1,49 +1,39 @@
 package View;
 
-import java.awt.Button;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
 
 import Controller.Keyboard;
 import Model.Birds;
 import Model.Fenetre;
 import Model.ItemDisplay;
+import Model.StateFen;
 import Model.Walkers;
 
-public class Affichage extends JPanel implements Observer {
+public class Affichage extends ZoneAff {
 	/**
 	* Obligatoire mais des recherches Ã  faire pour savoir pk
 	*/
 	private static final long serialVersionUID = 1L;
 	private Keyboard keyListener;
-	
-	// Liste de tous les objets ï¿½ afficher.
-	//protected ArrayList<Walkers> _list_walkers_display = new ArrayList<Walkers>();
-	//protected ArrayList<Birds> _list_birds_display = new ArrayList<Birds>();
-	//protected ArrayList<ItemDisplay> _list_static_items_display = new ArrayList<ItemDisplay>();
+	private Birds _currentBird;
 	
 	public Affichage() {
 		super();
 		this.setFocusable(true);
 		this.requestFocus();
 		
-		keyListener = new Keyboard(Fenetre._list_birds.get(0));
-		this.addKeyListener(keyListener);
+		keyListener = new Keyboard(this);
+		addKeyListener(keyListener);
 	}
 	
 	
 
-	public void paintComponent(Graphics g){	
+	public void paintComponent(Graphics g) {	
 		this.requestFocus();
 		
 		for(int i = 0; i < Fenetre._list_static_items.size(); i++) {
@@ -103,12 +93,36 @@ public class Affichage extends JPanel implements Observer {
 		}
 	}
 	
+	public void changeBird (Birds newBird) {
+		_currentBird = newBird;
+	}
+	
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		
-		this.removeKeyListener(keyListener);
-		keyListener = new Keyboard(Fenetre._list_birds.get(0));
-		this.addKeyListener(keyListener);
+	public void actionESC() {
+		Fenetre._state = StateFen.MenuPause;
+	}
+	
+	@Override
+	public void actionSPACE() {
+		if (Fenetre._state == StateFen.Level){ 
+			if (Fenetre._list_birds.size() != 0) { // Test s'il existe un oiseau
+				if (_currentBird.getMoving())
+					System.out.println("Vol Stationnaire.");
+				else
+					System.out.println("Mise en mouvement.");
+				_currentBird.setMoving(!_currentBird.getMoving());
+			}
+		}
+	}
+	
+	@Override
+	public void actionENTER() {
+		if (Fenetre.oeufEnCours == null && Fenetre._state == StateFen.Level){
+			// Test s'il existe un oiseau et s'il existe demande à l'oiseau de lacher un oeuf
+			if (Fenetre._list_birds.size() != 0 ) {
+				Fenetre.oeufEnCours = _currentBird.lay_egg();
+			}
+		}
 	}
 	
 }
