@@ -2,7 +2,6 @@ package Model;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
 import Threading.Print_aff;
 import Threading.Print_menu;
@@ -18,7 +18,7 @@ import View.Affichage;
 
 public class Fenetre extends JFrame implements Constantes {
 	/**
-	 * Obligatoire pour une fenêtre
+	 * Obligatoire pour une fen�tre
 	 */
 	private static final long serialVersionUID = 1L;
 	
@@ -27,26 +27,21 @@ public class Fenetre extends JFrame implements Constantes {
 	private static Thread _threadMenu = null;
 	public static Fenetre _fenster = null;
 	public static boolean _working = false;
+	static public StateFen _state = StateFen.MenuPrinc;
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu menuedition = new JMenu("Edition");
 	private JMenuItem go = new JMenuItem("Lancer");
 	private JMenuItem pause = new JMenuItem("Pause");
 	private JMenuItem stop = new JMenuItem("Quitter");
-	private Bouton jouer = new Bouton("Jouer", 300, 100, 200, 50);
-	private Bouton charger = new Bouton("Charger partie", 300, 175, 200, 50);
-	private Bouton exit = new Bouton("Exit", 300, 250, 200, 50);
-	private String path = "levels/";
 	
 	static public List<Walkers> _list_walkers = new LinkedList<Walkers>();
 	static public List<Birds> _list_birds = new LinkedList<Birds>();
 	static public List<ItemDisplay> _list_static_items = new LinkedList<ItemDisplay>();
 	static public Eggs oeufEnCours = null;
-	static public boolean _anime = false;
 	
 	private Affichage _panelAff;
-	private Menu _panelMenu = new Menu();
-	private MenuNiveau _panelNiveau = new MenuNiveau();
+	private MenuSelector _panelMenu;
 
 	public static void main(String[] args){
 		Fenetre._fenster = new Fenetre();
@@ -56,119 +51,97 @@ public class Fenetre extends JFrame implements Constantes {
 			Fenetre._fenster.startThreads();
 		}
 	}
+
+	public static void setState(StateFen newState) {
+		_state = newState;
+	}
 	
 	public void startThreads () {
 		while (_working) {
-			if (_anime) {
-				if (_threadAff == null && _threadCalcPos == null) {
-					// Crée les threads d'affichage du niveau et de calcul des positions
+			if (_state == StateFen.Level) {
+				if ((_threadAff == null && _threadCalcPos == null) || _threadAff.getState().toString() == "TERMINATED") {
+					// Cree les threads d'affichage du niveau et de calcul des positions
 					_threadAff = new Thread(new Print_aff());
 					_threadCalcPos = new Thread(new Calc_pos());
 					
-					// Démarre les threads
+					// Demarre les threads
 					_threadAff.start();
 					_threadCalcPos.start();
 					
-					// Affiche le panel du niveau dans la fenêtre et fixe la taille de la fenêtre
-					setContentPane(_panelAff);
-					setVisible(true);
-					setSize(800,600);
+					// Affiche le panel du niveau dans la fenetre
+					setPanel(_panelAff);
 					
 					System.out.println("Cree le Thread affichage et calcul de position");
 				}
 			} else {
-				if (_threadMenu == null) {
-					// Crée le thread pour le menu
+				if (_threadMenu == null || _threadMenu.getState().toString() == "TERMINATED") {
+					// Cree le thread pour le menu
 					_threadMenu = new Thread(new Print_menu());
 					
-					// Démarre le thread
+					// Demarre le thread
 					_threadMenu.start();
 					
 					// Affiche le panel du menu
-					setContentPane(_panelMenu);
-					setVisible(true);
+					setPanel(_panelMenu.selectMenu());
 
 					System.out.println("Cree le Thread menu");
 				}
 			}
 			
-			// Vérifie l'état des threads toutes les demi-secondes
+			// Verifie l'etat des threads toutes les demi-secondes
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		
 		System.out.println("Quitte le jeu");
 		System.exit(0);
 	}
 	
+	public void setPanel(JPanel curPanel) {
+		setContentPane(curPanel);
+		setVisible(true);
+	}
+
 	public Fenetre() {
 		_working = true;
-		DataBase level = new DataBase();
-		level.loadLevel(1);
 		
 		_panelAff = new Affichage();
-		
-		this._panelMenu.add(jouer);
-		jouer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				_anime = true;
-				System.out.println("Bouton Jouer");
-			}
-		});
-		this._panelMenu.add(exit);
-		exit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Fenetre._working = false;
-				System.out.println("Bouton Exit");
-			}
-		});
-		
-		this._panelMenu.add(charger);
-		charger.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Lister liste = new Lister();
-				File rep = new File(path);
-				liste.listerRepertoire(rep,_panelNiveau);
-				setContentPane(_panelNiveau);
-				setVisible(true);
-			}
-		});
+		_panelMenu = new MenuSelector();
 
-		this.menuedition.add(go);
+		menuedition.add(go);
 		go.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				_anime = true;
+				Fenetre._state = StateFen.Level;
 			}
 		});
 		
-		this.menuedition.add(pause);
+		menuedition.add(pause);
 		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent agr0) {
-				_anime = false;
+				Fenetre._state = StateFen.MenuPause;
 			}
 		});
 		
-		this.menuedition.add(stop);
+		menuedition.add(stop);
 		stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				_working = false;
 			}
 		});
 		
+		menuBar.add(menuedition);
 		
-		this.menuBar.add(menuedition);
+		setTitle("AngryUTBM");
+		setSize(800,600);
 		
-		this.setTitle("AngryUTBM");
-		this.setSize(800,400);
-		
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setResizable(false);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 
-		this.setJMenuBar(menuBar);
-			
+		setJMenuBar(menuBar);
 	}
 	
 	public boolean outScreen(ItemDisplay item) {
@@ -179,7 +152,15 @@ public class Fenetre extends JFrame implements Constantes {
 		}
 		
 		return false;
-	}   
+	}
+	
+	public void changeBird (Birds newBird) {
+		_panelAff.changeBird(newBird);
+	}
+
+	public void updateMenu() {
+		setPanel(_panelMenu.selectMenu());
+	}
 }
 	
 

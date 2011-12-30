@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class MovingItems extends ItemDisplay {
+abstract public class MovingItems extends ItemDisplay {
 
 	protected List<String> _liste_texture = new LinkedList<String>();
 	protected int statutTexture = 0;

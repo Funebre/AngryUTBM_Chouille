@@ -2,13 +2,11 @@ package Threading;
 
 import Model.Constantes;
 import Model.Fenetre;
+import Model.StateFen;
 
 public class Calc_pos implements Constantes, Runnable {
-	private boolean _stop = false;
-	
 	public void run() {
-		while (!_stop && Fenetre._anime) {
-			//Fenetre._fenster.calc_pos();
+		while (Fenetre._state == StateFen.Level) {
 			this.calc_pos();
 			
 			try {
@@ -24,7 +22,7 @@ public class Calc_pos implements Constantes, Runnable {
 			if (Fenetre._list_walkers.get(i).collide_static() || Fenetre._fenster.outScreen(Fenetre._list_walkers.get(i)))
 				Fenetre._list_walkers.get(i).switchArriereState();
 			
-			Fenetre._list_walkers.get(i).move(Fenetre._fenster);
+			Fenetre._list_walkers.get(i).move();
 		}
 		
 					

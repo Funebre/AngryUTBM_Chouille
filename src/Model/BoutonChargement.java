@@ -15,6 +15,8 @@ public class BoutonChargement extends Bouton {
 		this.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				data.loadLevel(i);
+				Fenetre.setState(StateFen.Level);
+				System.out.println("Début du level " + i);
 			}
 		});
 	}

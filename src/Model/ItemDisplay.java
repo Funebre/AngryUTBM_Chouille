@@ -3,7 +3,7 @@ package Model;
 import java.awt.Rectangle;
 import java.util.Observable;
 
-public class ItemDisplay extends Observable implements Constantes {
+abstract public class ItemDisplay extends Observable implements Constantes {
 	protected float _x;
 	protected float _y;
 	protected int _width;
@@ -16,7 +16,6 @@ public class ItemDisplay extends Observable implements Constantes {
 	
 	public ItemDisplay(){
 		super();
-		
 	}
 
 	public ItemDisplay(float x, float y, int width, int height){
@@ -25,18 +24,6 @@ public class ItemDisplay extends Observable implements Constantes {
 		this._y = y;
 		this._width = width;
 		this._height = height;
-		
-		this._r = new Rectangle(this.getPosX(), this.getPosY(), this.getWidth(), this.getHeight());
-	}
-
-	public ItemDisplay(float x, float y, int width, int height, String texture){
-		super();
-		this._x = x;
-		this._y = y;
-		this._width = width;
-		this._height = height;
-		
-		this._texture = texture;
 		
 		this._r = new Rectangle(this.getPosX(), this.getPosY(), this.getWidth(), this.getHeight());
 	}
