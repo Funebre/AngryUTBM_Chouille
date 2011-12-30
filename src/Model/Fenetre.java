@@ -27,7 +27,7 @@ public class Fenetre extends JFrame implements Constantes {
 	private static Thread _threadMenu = null;
 	public static Fenetre _fenster = null;
 	public static boolean _working = false;
-	static public StateFen _state = StateFen.MenuPrinc;
+	public static StateFen _state = StateFen.MenuPrinc;
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu menuedition = new JMenu("Edition");
@@ -39,10 +39,12 @@ public class Fenetre extends JFrame implements Constantes {
 	static public List<Birds> _list_birds = new LinkedList<Birds>();
 	static public List<ItemDisplay> _list_static_items = new LinkedList<ItemDisplay>();
 	static public Eggs oeufEnCours = null;
+	//static public HighScore _score;
+	static public DataBase _level = new DataBase();
 	
 	private Affichage _panelAff;
-	private MenuSelector _panelMenu;
-
+	private MenuSelector _menuSelect;
+	
 	public static void main(String[] args){
 		Fenetre._fenster = new Fenetre();
 		
@@ -55,61 +57,12 @@ public class Fenetre extends JFrame implements Constantes {
 	public static void setState(StateFen newState) {
 		_state = newState;
 	}
-	
-	public void startThreads () {
-		while (_working) {
-			if (_state == StateFen.Level) {
-				if ((_threadAff == null && _threadCalcPos == null) || _threadAff.getState().toString() == "TERMINATED") {
-					// Cree les threads d'affichage du niveau et de calcul des positions
-					_threadAff = new Thread(new Print_aff());
-					_threadCalcPos = new Thread(new Calc_pos());
-					
-					// Demarre les threads
-					_threadAff.start();
-					_threadCalcPos.start();
-					
-					// Affiche le panel du niveau dans la fenetre
-					setPanel(_panelAff);
-					
-					System.out.println("Cree le Thread affichage et calcul de position");
-				}
-			} else {
-				if (_threadMenu == null || _threadMenu.getState().toString() == "TERMINATED") {
-					// Cree le thread pour le menu
-					_threadMenu = new Thread(new Print_menu());
-					
-					// Demarre le thread
-					_threadMenu.start();
-					
-					// Affiche le panel du menu
-					setPanel(_panelMenu.selectMenu());
-
-					System.out.println("Cree le Thread menu");
-				}
-			}
-			
-			// Verifie l'etat des threads toutes les demi-secondes
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		System.out.println("Quitte le jeu");
-		System.exit(0);
-	}
-	
-	public void setPanel(JPanel curPanel) {
-		setContentPane(curPanel);
-		setVisible(true);
-	}
 
 	public Fenetre() {
 		_working = true;
 		
 		_panelAff = new Affichage();
-		_panelMenu = new MenuSelector();
+		_menuSelect = new MenuSelector();
 
 		menuedition.add(go);
 		go.addActionListener(new ActionListener() {
@@ -159,10 +112,55 @@ public class Fenetre extends JFrame implements Constantes {
 	}
 
 	public void updateMenu() {
-		setPanel(_panelMenu.selectMenu());
+		setPanel(_menuSelect.selectMenu());
+	}
+	
+	private void startThreads () {
+		while (_working) {
+			if (_state == StateFen.Level) {
+				if ((_threadAff == null && _threadCalcPos == null) || _threadAff.getState().toString() == "TERMINATED") {
+					// Cree les threads d'affichage du niveau et de calcul des positions
+					_threadAff = new Thread(new Print_aff());
+					_threadCalcPos = new Thread(new Calc_pos());
+					
+					// Demarre les threads
+					_threadAff.start();
+					_threadCalcPos.start();
+					
+					// Affiche le panel du niveau dans la fenetre
+					setPanel(_panelAff);
+					
+					System.out.println("Cree le Thread affichage et calcul de position");
+				}
+			} else {
+				if (_threadMenu == null || _threadMenu.getState().toString() == "TERMINATED") {
+					// Cree le thread pour le menu
+					_threadMenu = new Thread(new Print_menu());
+					
+					// Demarre le thread
+					_threadMenu.start();
+					
+					// Affiche le panel du menu
+					setPanel(_menuSelect.selectMenu());
+
+					System.out.println("Cree le Thread menu");
+				}
+			}
+			
+			// Verifie l'etat des threads toutes les demi-secondes
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println("Quitte le jeu");
+		System.exit(0);
+	}
+	
+	private void setPanel(JPanel curPanel) {
+		setContentPane(curPanel);
+		setVisible(true);
 	}
 }
-	
-
-
-

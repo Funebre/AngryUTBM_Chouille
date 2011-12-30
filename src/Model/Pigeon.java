@@ -2,9 +2,16 @@ package Model;
 
 public class Pigeon extends Birds {
 
-	public Pigeon(int posx, int posy) {
+	public Pigeon(double posx, double posy) {
+		super(posx, posy,_VITESSE_BIRD_PIGEON, _WIDTH_BIRD_PIGEON, _HEIGHT_BIRD_PIGEON, _FLIGHT_TIME_BIRD_PIGEON, _STAT_TIME_BIRD_PIGEON, _EGGS_PIGEON, 0, false);
+		
 		_type = 7;
-		this._egg_left = 3;
+	}
+
+	public Pigeon(int posx, int posy, int egg, int flight, int stat, int takeoff, boolean moving) {
+		super(posx, posy,_VITESSE_BIRD_COLIBRI, _WIDTH_BIRD_COLIBRI, _HEIGHT_BIRD_COLIBRI, flight, stat, egg, takeoff, moving);
+		
+		_type = 7;
 	}
 
 	@Override

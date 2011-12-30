@@ -1,10 +1,16 @@
 package Model;
 
 public class Moineau extends Birds {
-
 	public Moineau(int posx, int posy) {
+		super(posx, posy, _VITESSE_BIRD_MOINEAU, _WIDTH_BIRD_MOINEAU, _HEIGHT_BIRD_MOINEAU, _FLIGHT_TIME_BIRD_MOINEAU, _STAT_TIME_BIRD_MOINEAU, _EGGS_MOINEAU, 0, false);
+		
 		_type = 8;
-		this._egg_left = 1;
+	}
+
+	public Moineau(double posx, double posy, int egg, int flight, int stat, int takeoff, boolean moving) {
+		super(posx, posy, _VITESSE_BIRD_MOINEAU, _WIDTH_BIRD_MOINEAU, _HEIGHT_BIRD_MOINEAU, flight, stat, egg, takeoff, moving);
+
+		_type = 8;
 	}
 
 	@Override

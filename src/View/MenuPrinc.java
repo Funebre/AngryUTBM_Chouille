@@ -51,7 +51,6 @@ public class MenuPrinc extends ZoneAff {
 		
 		_keyListener = new Keyboard(this);
 		addKeyListener(_keyListener);
-		repaint();
 	}
 
 	public Image getImg() {

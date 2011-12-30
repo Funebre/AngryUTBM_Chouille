@@ -4,8 +4,8 @@ import java.awt.Rectangle;
 import java.util.Observable;
 
 abstract public class ItemDisplay extends Observable implements Constantes {
-	protected float _x;
-	protected float _y;
+	protected double _x;
+	protected double _y;
 	protected int _width;
 	protected int _height;
 	protected Rectangle _r;
@@ -18,61 +18,65 @@ abstract public class ItemDisplay extends Observable implements Constantes {
 		super();
 	}
 
-	public ItemDisplay(float x, float y, int width, int height){
+	public ItemDisplay(double x, double y, int width, int height){
 		super();
-		this._x = x;
-		this._y = y;
-		this._width = width;
-		this._height = height;
+		_x = x;
+		_y = y;
+		_width = width;
+		_height = height;
 		
-		this._r = new Rectangle(this.getPosX(), this.getPosY(), this.getWidth(), this.getHeight());
+		_r = new Rectangle(getPosX(), getPosY(), getWidth(), getHeight());
 	}
 	
-	public void setPosX(float x){
-		this._x = x;
+	public void setPosX(double x){
+		_x = x;
 	}
 	
 	public int getPosX(){
-		return (int) Math.floor(this._x);
+		return (int) Math.floor(_x);
 	}
 	
-	public void setPosY(int y){
-		this._y = y;
+	public void setPosY(double y){
+		_y = y;
 	}
 	
 	public int getPosY(){
-		return (int) Math.floor(this._y);
+		return (int) Math.floor(_y);
 	}
 	
 	public void setWidth(int x){
-		this._width = x;
+		_width = x;
 	}
 	
 	public int getWidth(){
-		return this._width;
+		return _width;
 	}
 	
 	public void setHeight(int y){
-		this._height=y;
+		this._height = y;
 	}
 	
 	public int getHeight(){
-		return this._height;
+		return _height;
 	}
 	
 	public void addTexture(String path){
-		this._texture = path;
+		_texture = path;
 	}
 	
 	public String getTexture(){
-		return this._texture;
+		return _texture;
 	}
 	
 	public Rectangle getRect(){
-		return this._r;
+		return _r;
 	}
 	
 	public boolean getSolid () {
-		return this._solid;
+		return _solid;
+	}
+	
+	public int getType() {
+		return _type;
 	}
 }

@@ -8,17 +8,16 @@ import javax.swing.JButton;
 
 
 public class Bouton extends JButton implements MouseListener {
-	
-
 	private static final long serialVersionUID = 1L;
-
+	private boolean _clicked = false;
+	
 	public Bouton(String name, int X, int Y, int width, int height) {
 		super(name);
 		
-		this.setBackground(Color.WHITE);
-		this.setBounds(X,Y,width,height);
-		this.addMouseListener(this);
-		this.setOpaque(true);
+		setBackground(Color.WHITE);
+		setBounds(X,Y,width,height);
+		addMouseListener(this);
+		setOpaque(true);
 	}
 
 
@@ -42,14 +41,15 @@ public class Bouton extends JButton implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		_clicked = true;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(!(e.getY() < 0 || e.getX() < 0 || e.getY() > this.getHeight() || e.getX() > this.getWidth()) && _clicked) {
+			
+		}
+		_clicked = false;
 	}
 
 }

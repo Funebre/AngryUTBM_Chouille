@@ -13,23 +13,20 @@ abstract public class MovingItems extends ItemDisplay {
 	protected boolean _destructed = false;
 	protected boolean _destructing = false;
 	
-	public MovingItems() {
-		super();	
-	}
-	
-	public MovingItems(float x, float y, int vitesse, int width, int height) {
-		super(x,y,width,height);	
-		this._vitesse = vitesse;
+	public MovingItems(double x, double y, int vitesse, int width, int height) {
+		super(x, y, width, height);	
+		_vitesse = vitesse;
+		_solid = true;
 	}
 	
 	public void moveX(float x) {
-		this._x += x;
-		this._r.setLocation(this.getPosX(), this.getPosY());
+		_x += x;
+		_r.setLocation(getPosX(), getPosY());
 	}
 	
 	public void moveY(float y) {
-		this._y += y;
-		this._r.setLocation(this.getPosX(), this.getPosY());
+		_y += y;
+		_r.setLocation(getPosX(), getPosY());
 	}
 	
 	public boolean isDestructed () {
@@ -57,4 +54,6 @@ abstract public class MovingItems extends ItemDisplay {
 		
 		return false;
 	}
+	
+	abstract public void demol();
 }

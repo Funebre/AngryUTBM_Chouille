@@ -2,10 +2,6 @@ package Model;
 
 
 public class Small_egg extends Eggs {
-	public Small_egg() {
-		super();
-	}
-	
 	public Small_egg(int x, int y) {
 		super(x,y,_WIDTH_SMALL_EGG,_VITESSE_SMALL_EGG, _HEIGHT_SMALL_EGG);
 		_texture = "img/egg.png";
@@ -21,5 +17,11 @@ public class Small_egg extends Eggs {
 				return i;
 			}
 		return -1;
+	}
+
+	@Override
+	public void demol() {
+		// TODO Auto-generated method stub
+		
 	}
 }

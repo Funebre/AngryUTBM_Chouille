@@ -8,11 +8,7 @@ abstract public class Birds extends MovingItems {
 	protected int _takeoff = 0;
 	protected boolean _bouge = false;
 	
-	public Birds(){
-		super();
-	}
-	
-	public Birds(float x, float y,int vitesse, int width, int height, double flight_time, double stat_time, int egg_left, int takeoff, boolean bouge) {
+	public Birds(double x, double y,int vitesse, int width, int height, double flight_time, double stat_time, int egg_left, int takeoff, boolean bouge) {
 		super(x,y,vitesse,width,height);
 		_flight_time = flight_time * 1000;
 		_stat_time = stat_time * 1000;
@@ -25,7 +21,6 @@ abstract public class Birds extends MovingItems {
 		moveX((float)_vitesse / 1000 * 5);
 		moveY((float)-1.2 * _REFRESH_POS / 5);
 		_takeoff++;
-		
 	}
 	
 	private void land () {
@@ -49,7 +44,7 @@ abstract public class Birds extends MovingItems {
 		}
 	}
 	
-	/* Retourne true si l'oiseau est en train d'être détruit
+	/* Retourne true si l'oiseau est en train d'etre detruit
 	* @param void
 	* @return boolean
 	*/
@@ -83,4 +78,20 @@ abstract public class Birds extends MovingItems {
 	}
 	
 	abstract public void demol();
+
+	public int getEggLeft() {
+		return _egg_left;
+	}
+
+	public double getFlightTime() {
+		return _flight_time;
+	}
+
+	public double getStatTime() {
+		return _stat_time;
+	}
+
+	public int getTakeOff() {
+		return _takeoff;
+	}
 }

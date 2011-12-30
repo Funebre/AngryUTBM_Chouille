@@ -24,18 +24,22 @@ public class Keyboard implements KeyListener {
 		
 		if (evt.getKeyCode() == KeyEvent.VK_ESCAPE){
 			_listener.actionESC();
+			System.out.println("Echap");
 		}
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		
+	}
+
+	public void setPanel(ZoneAff Zone) {
+		_listener = Zone;
 	}
 }

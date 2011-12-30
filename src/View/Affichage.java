@@ -19,19 +19,17 @@ public class Affichage extends ZoneAff {
 	* Obligatoire mais des recherches Ã  faire pour savoir pk
 	*/
 	private static final long serialVersionUID = 1L;
-	private Keyboard keyListener;
+	private Keyboard _keyListener;
 	private Birds _currentBird;
 	
 	public Affichage() {
 		super();
-		this.setFocusable(true);
-		this.requestFocus();
+		setFocusable(true);
+		requestFocus();
 		
-		keyListener = new Keyboard(this);
-		addKeyListener(keyListener);
+		_keyListener = new Keyboard(this);
+		addKeyListener(_keyListener);
 	}
-	
-	
 
 	public void paintComponent(Graphics g) {	
 		this.requestFocus();
@@ -99,7 +97,7 @@ public class Affichage extends ZoneAff {
 	
 	@Override
 	public void actionESC() {
-		Fenetre._state = StateFen.MenuPause;
+		Fenetre.setState(StateFen.MenuPause);
 	}
 	
 	@Override
@@ -117,7 +115,7 @@ public class Affichage extends ZoneAff {
 	
 	@Override
 	public void actionENTER() {
-		if (Fenetre.oeufEnCours == null && Fenetre._state == StateFen.Level){
+		if (Fenetre.oeufEnCours == null && Fenetre._state == StateFen.Level && _currentBird.getMoving()){
 			// Test s'il existe un oiseau et s'il existe demande à l'oiseau de lacher un oeuf
 			if (Fenetre._list_birds.size() != 0 ) {
 				Fenetre.oeufEnCours = _currentBird.lay_egg();
