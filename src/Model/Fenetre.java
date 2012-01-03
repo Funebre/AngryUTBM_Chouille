@@ -9,16 +9,16 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 
 import Threading.Print_aff;
 import Threading.Print_menu;
 import Threading.Calc_pos;
 import View.Affichage;
+import View.ZoneAff;
 
 public class Fenetre extends JFrame implements Constantes {
 	/**
-	 * Obligatoire pour une fenêtre
+	 * Obligatoire pour une fenï¿½tre
 	 */
 	private static final long serialVersionUID = 1L;
 	
@@ -159,7 +159,7 @@ public class Fenetre extends JFrame implements Constantes {
 		System.exit(0);
 	}
 	
-	private void setPanel(JPanel curPanel) {
+	private void setPanel(ZoneAff curPanel) {
 		setContentPane(curPanel);
 		setVisible(true);
 	}
