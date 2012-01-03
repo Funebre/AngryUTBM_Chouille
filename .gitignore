@@ -3,3 +3,5 @@ bin
 */.metadata/*
 .metadata
 saved_game/*
+.classpath
+.project
