@@ -13,6 +13,10 @@ public class Colibri extends Birds {
 		this._liste_texture.add("img/oiseau1.png");
 		this._texture = "img/oiseau1.png";
 		this._type = 6;
+		this._liste_destructing.add("img/pacman2.jpg");
+		this._liste_destructing.add("img/pacman2.jpg");
+		this._liste_destructing.add("img/pacman2.jpg");
+		this._liste_destructing.add("img/pacman2.jpg");
 	}
 	
 	public Colibri(double posx, double posy, int egg, int flight, int stat, int takeoff, boolean moving) {
@@ -37,12 +41,27 @@ public class Colibri extends Birds {
 	
 	@Override
 	public void demol() {
-		if (!this._destructing)
+		if (!this._destructing){
 			this._destructing = true;
+			this.statutTexture =0;
+		}
 		else {
-			this.statutTexture++;
+			if(this.destructing_time == 26){
+				this._texture = this._liste_destructing.get(statutTexture);
+				++this.statutTexture;
+			}
+			else if (this.destructing_time == 51){
+				this._texture = this._liste_destructing.get(statutTexture);
+				++this.statutTexture;
+			}
+			else if (this.destructing_time == 76){
+				this._texture = this._liste_destructing.get(statutTexture);
+				++this.statutTexture;
+			}
 			
-			if (this.statutTexture == 5)
+			++this.destructing_time;
+			
+			if (this.destructing_time > 100)
 				this._destructed = true;
 		}
 	}

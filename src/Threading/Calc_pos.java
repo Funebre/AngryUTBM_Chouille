@@ -28,9 +28,12 @@ public class Calc_pos implements Constantes, Runnable {
 					
 		//Deplacement des oiseaux
 		for(int i = 0; i < Fenetre._list_birds.size(); i++){
-			if (Fenetre._list_birds.get(i).collide_static() || Fenetre._list_birds.get(i).collide_dynamic() || Fenetre._fenster.outScreen(Fenetre._list_birds.get(i)) || Fenetre._list_birds.get(i).isDestructing())
+			if (Fenetre._list_birds.get(i).collide_static() || Fenetre._list_birds.get(i).collide_dynamic() || Fenetre._fenster.outScreen(Fenetre._list_birds.get(i)) || Fenetre._list_birds.get(i).isDestructing()){
 				Fenetre._list_birds.get(i).demol();
+			}
+			else{
 			Fenetre._list_birds.get(i).move();
+			}
 		}
 		
 		if(Fenetre.oeufEnCours != null) {

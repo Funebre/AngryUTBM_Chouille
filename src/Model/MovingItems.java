@@ -7,11 +7,13 @@ import java.util.List;
 abstract public class MovingItems extends ItemDisplay {
 
 	protected List<String> _liste_texture = new LinkedList<String>();
+	protected List<String> _liste_destructing = new LinkedList<String>();
 	protected int statutTexture = 0;
 	protected int _vitesse;
 	protected int _timer = 0 ;
 	protected boolean _destructed = false;
 	protected boolean _destructing = false;
+	protected int destructing_time = 0;
 	
 	public MovingItems(double x, double y, int vitesse, int width, int height) {
 		super(x, y, width, height);	
